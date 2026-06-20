@@ -23,14 +23,13 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Create .env file
-        run: cp .env.example .env
-
-      - name: Generate Android platform files (keep our pubspec)
+      - name: Prepare project
         run: |
+          cp .env.example .env 2>/dev/null || touch .env
           cp pubspec.yaml /tmp/pubspec.yaml
           flutter create --platforms=android --project-name lifedz --org com.lifedz .
           cp /tmp/pubspec.yaml pubspec.yaml
+          sed -i 's/^  intl:.*/  intl: any/' pubspec.yaml
 
       - name: Get dependencies
         run: flutter pub get
